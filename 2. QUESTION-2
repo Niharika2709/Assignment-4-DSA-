@@ -1,0 +1,85 @@
+QUESTION 2) Develop a menu driven program demonstrating the following operations on Circular 
+Queues: enqueue(), dequeue(), isEmpty(), isFull(), display(), and peek(). 
+
+
+#include <iostream>
+using namespace std;
+
+class CircularQueue {
+    int *arr, size, front, rear;
+
+public:
+    CircularQueue(int s) {
+        size = s;
+        arr = new int[size];
+        front = rear = -1;
+    }
+
+    bool isEmpty() { return (front == -1); }
+
+    bool isFull() { return ((rear + 1) % size == front); }
+
+    void enqueue(int x) {
+        if (isFull()) {
+            cout << "Queue FULL!\n";
+            return;
+        }
+        if (isEmpty()) front = 0;
+        rear = (rear + 1) % size;
+        arr[rear] = x;
+        cout << x << " added\n";
+    }
+
+    void dequeue() {
+        if (isEmpty()) {
+            cout << "Queue EMPTY!\n";
+            return;
+        }
+        cout << arr[front] << " removed\n";
+        if (front == rear) // only one element
+            front = rear = -1;
+        else
+            front = (front + 1) % size;
+    }
+
+    void peek() {
+        if (isEmpty()) cout << "Queue EMPTY!\n";
+        else cout << "Front: " << arr[front] << endl;
+    }
+
+    void display() {
+        if (isEmpty()) {
+            cout << "Queue EMPTY!\n";
+            return;
+        }
+        cout << "Queue: ";
+        int i = front;
+        while (true) {
+            cout << arr[i] << " ";
+            if (i == rear) break;
+            i = (i + 1) % size;
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    int n, ch, val;
+    cout << "Enter queue size: ";
+    cin >> n;
+    CircularQueue q(n);
+
+    do {
+        cout << "\n1.Enqueue  2.Dequeue  3.Peek  4.Display  0.Exit\n";
+        cout << "Enter choice: ";
+        cin >> ch;
+        switch (ch) {
+            case 1: cout << "Enter value: "; cin >> val; q.enqueue(val); break;
+            case 2: q.dequeue(); break;
+            case 3: q.peek(); break;
+            case 4: q.display(); break;
+            case 0: cout << "Exiting...\n"; break;
+            default: cout << "Invalid!\n";
+        }
+    } while (ch != 0);
+}
